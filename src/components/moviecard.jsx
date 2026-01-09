@@ -2,21 +2,23 @@ export default function MovieCard({ movie }) {
   const poster =
     movie.Poster !== "N/A"
       ? movie.Poster
-      : "https://via.placeholder.com/150x220?text=No+Image";
+      : "https://via.placeholder.com/300x450?text=No+Image";
 
   return (
-    <div style={{ display: "flex", gap: "16px", margin: "12px 0" }}>
+    <div className="bg-card rounded-lg overflow-hidden hover:scale-105 transition cursor-pointer">
       <img
         src={poster}
         alt={movie.Title}
-        width="100"
-        height="150"
+        className="w-full h-[300px] object-cover"
       />
 
-      <div>
-        <h3>{movie.Title}</h3>
-        <p>Year: {movie.Year}</p>
-        <p>Type: {movie.Type}</p>
+      <div className="p-3">
+        <h3 className="font-heading text-lg">
+          {movie.Title}
+        </h3>
+        <p className="text-secondary text-sm">
+          {movie.Year}
+        </p>
       </div>
     </div>
   );
