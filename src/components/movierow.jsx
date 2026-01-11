@@ -3,9 +3,12 @@ import MovieCard from "./moviecard";
 export default function MovieRow({ title, movies }) {
   return (
     <section className="mb-16">
-      <h2 className="text-xl mb-6 tracking-wide">
-        {title}
-      </h2>
+      <h2
+  className="text-2xl md:text-3xl mb-8 tracking-widest text-white"
+  style={{ fontFamily: "Share Tech" }}
+>
+  {title}
+</h2>
 
       <div
         className="

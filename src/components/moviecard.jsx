@@ -5,10 +5,10 @@ export default function MovieCard({ movie }) {
         className="
           relative overflow-hidden rounded-2xl
           bg-white/5 backdrop-blur-md
-          border border-white/10
+          border border-white/10 group-hover:border-[#e07b5b]/40
           transition-all duration-300
           group-hover:scale-[1.03]
-          group-hover:shadow-[0_0_30px_rgba(224,123,91,0.25)]
+          group-hover:shadow-[0_0_40px_rgba(224,123,91,0.45)]
         "
       >
         <img
@@ -20,7 +20,7 @@ export default function MovieCard({ movie }) {
 
       {/* Movie info */}
       <div className="mt-3 space-y-1">
-        <h3 className="text-sm font-medium leading-tight">
+        <h3 className="text-sm font-medium leading-tight group-hover:text-[#e07b5b] transition">
           {movie.Title}
         </h3>
         <p className="text-xs text-[#77615a]">

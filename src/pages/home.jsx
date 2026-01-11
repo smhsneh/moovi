@@ -55,23 +55,64 @@ export default function Home() {
   }, [query]);
 
   return (
-    <div className="min-h-screen bg-[#111111] text-white px-8 pt-8">
-      {/* Header */}
-      <div className="mb-14">
-        <h1 className="text-3xl mb-8 tracking-wide">
-          Discover
+  <div
+  className="min-h-screen text-white px-8"
+  style={{
+    backgroundImage: `
+      radial-gradient(circle at 20% 30%, rgba(224,123,91,0.80), transparent 60%),
+      radial-gradient(circle at 80% 20%, rgba(255,100,40,0.65), transparent 65%),
+      radial-gradient(circle at 50% 90%, rgba(120,20,0,0.55), transparent 70%),
+      linear-gradient(180deg, #0a0a0a, #111111 80%)
+    `,
+    backgroundBlendMode: "overlay, overlay, overlay, normal",
+  }}
+>
+
+      {/* Header (no gradient now) */}
+      <div className="mb-24 pt-24 pb-20 flex flex-col items-center text-center">
+        <h1
+          className="text-6xl md:text-7xl tracking-[0.35em] mb-10"
+          style={{ fontFamily: "Share Tech" }}
+        >
+          <span className="text-[#e07b5b]">MOO</span>VI
         </h1>
 
         <SearchBar value={query} onChange={setQuery} />
+
+        {/* Categories */}
+        <div className="flex flex-wrap justify-center gap-4 mt-10">
+          {[
+            "Action",
+            "Sci-Fi",
+            "Drama",
+            "Thriller",
+            "Fantasy",
+            "Romance",
+          ].map((cat) => (
+            <div
+              key={cat}
+              className="
+                px-6 py-2
+                rounded-full
+                bg-white/5 backdrop-blur-md
+                border border-white/10
+                text-sm tracking-wide
+                cursor-pointer
+                transition
+                hover:bg-[#e07b5b]/20
+                hover:border-[#e07b5b]/40
+                hover:text-[#e07b5b]
+              "
+            >
+              {cat}
+            </div>
+          ))}
+        </div>
       </div>
 
-      {error && (
-        <p className="text-gray-400 mb-6">
-          {error}
-        </p>
-      )}
+      {error && <p className="text-gray-400 mb-6">{error}</p>}
 
-      {/* Search Results */}
+      {/* Search Results or Home Rows */}
       {searchResults.length > 0 ? (
         <MovieRow title="Search Results" movies={searchResults} />
       ) : (
