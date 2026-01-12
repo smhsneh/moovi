@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { searchMovies } from "../services/omdbapi";
 import MovieRow from "../components/movierow";
 import SearchBar from "../components/searchbar";
 import ticketImg from "../assets/movie-ticket.png.png";
 
 export default function Home() {
+  const ticketRef = useRef(null);
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [rows, setRows] = useState([]);
@@ -53,16 +54,50 @@ export default function Home() {
     return () => clearTimeout(timeout);
   }, [query]);
 
+  function handleTicketMove(e) {
+    const card = ticketRef.current;
+    if (!card) return;
+
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateX = ((y - centerY) / centerY) * -6;
+    const rotateY = ((x - centerX) / centerX) * 6;
+
+    card.style.transform = `
+      perspective(800px)
+      rotateX(${rotateX}deg)
+      rotateY(${rotateY}deg)
+      translateY(-6px)
+    `;
+  }
+
+  function handleTicketLeave() {
+    const card = ticketRef.current;
+    if (!card) return;
+
+    card.style.transform = `
+      perspective(800px)
+      rotateX(0deg)
+      rotateY(0deg)
+      translateY(0)
+    `;
+  }
+
   return (
     <div
       className="min-h-screen"
       style={{
         background: "#000000",
-        backgroundImage: "linear-gradient(to left, #8b1e14, #000000)",
+        backgroundImage: "linear-gradient(to left, #5c120b, #000000)",
       }}
     >
+      
       <div className="mb-24 pt-24 pb-20 px-12 flex items-center justify-between gap-16">
-        {}
         <div className="flex flex-col items-start text-left max-w-3xl">
           <h1
             className="text-6xl md:text-7xl tracking-[0.35em] mb-10"
@@ -86,20 +121,20 @@ export default function Home() {
               <div
                 key={cat}
                 className="
-            px-8 py-4
-            rounded-full
-            bg-white/10
-            backdrop-blur-lg
-            border border-[#e07b5b]/30
-            text-base md:text-lg
-            text-[#f5f5f5]
-            tracking-wide
-            cursor-pointer
-            transition-all duration-300
-            hover:bg-[#e07b5b]/20
-            hover:border-[#e07b5b]
-            hover:shadow-[0_0_20px_rgba(224,123,91,0.35)]
-          "
+                  px-8 py-4
+                  rounded-full
+                  bg-white/10
+                  backdrop-blur-lg
+                  border border-[#e07b5b]/30
+                  text-base md:text-lg
+                  text-[#f5f5f5]
+                  tracking-wide
+                  cursor-pointer
+                  transition-all duration-300
+                  hover:bg-[#e07b5b]/20
+                  hover:border-[#e07b5b]
+                  hover:shadow-[0_0_20px_rgba(224,123,91,0.35)]
+                "
               >
                 {cat}
               </div>
@@ -108,15 +143,26 @@ export default function Home() {
         </div>
 
         {}
-        <div className="hidden lg:block">
+        <div
+          ref={ticketRef}
+          onMouseMove={handleTicketMove}
+          onMouseLeave={handleTicketLeave}
+          style={{ transformStyle: "preserve-3d" }}
+          className="
+            hidden lg:block
+            transition-transform duration-200
+            will-change-transform
+          "
+        >
           <img
             src={ticketImg}
             alt="Movie ticket"
             className="
-        w-[550px]
-        opacity-90
-        drop-shadow-[0_0_40px_rgba(224,123,91,0.35)]
-      "
+              w-[550px]
+              opacity-90
+              drop-shadow-[0_0_40px_rgba(224,123,91,0.35)]
+              select-none
+            "
           />
         </div>
       </div>
