@@ -20,10 +20,10 @@ export default function MovieCard({ movie }) {
 
       {/* Movie info */}
       <div className="mt-3 space-y-1">
-        <h3 className="text-sm font-medium leading-tight group-hover:text-[#e07b5b] transition">
+        <h3 className="text-[#f5f5f5] text-base md:text-lg font-medium">
           {movie.Title}
         </h3>
-        <p className="text-xs text-[#77615a]">
+        <p className="text-[#d6d6d6] text-sm mt-1">
           {movie.Year} • {movie.Type}
         </p>
       </div>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { searchMovies } from "../services/omdbapi";
 import MovieRow from "../components/movierow";
 import SearchBar from "../components/searchbar";
+import ticketImg from "../assets/movie-ticket.png.png";
 
 export default function Home() {
   const [query, setQuery] = useState("");
@@ -9,7 +10,6 @@ export default function Home() {
   const [rows, setRows] = useState([]);
   const [error, setError] = useState("");
 
-  // Fetch multiple rows on load (API only)
   useEffect(() => {
     async function loadRows() {
       const queries = [
@@ -33,7 +33,6 @@ export default function Home() {
     loadRows();
   }, []);
 
-  // Search logic
   useEffect(() => {
     if (query.length < 3) {
       setSearchResults([]);
@@ -55,75 +54,85 @@ export default function Home() {
   }, [query]);
 
   return (
-  <div
-  className="min-h-screen text-white px-8"
-  style={{
-    backgroundImage: `
-      radial-gradient(circle at 20% 30%, rgba(224,123,91,0.80), transparent 60%),
-      radial-gradient(circle at 80% 20%, rgba(255,100,40,0.65), transparent 65%),
-      radial-gradient(circle at 50% 90%, rgba(120,20,0,0.55), transparent 70%),
-      linear-gradient(180deg, #0a0a0a, #111111 80%)
-    `,
-    backgroundBlendMode: "overlay, overlay, overlay, normal",
-  }}
->
+    <div
+      className="min-h-screen"
+      style={{
+        background: "#000000",
+        backgroundImage: "linear-gradient(to left, #8b1e14, #000000)",
+      }}
+    >
+      <div className="mb-24 pt-24 pb-20 px-12 flex items-center justify-between gap-16">
+        {}
+        <div className="flex flex-col items-start text-left max-w-3xl">
+          <h1
+            className="text-6xl md:text-7xl tracking-[0.35em] mb-10"
+            style={{ fontFamily: "Share Tech" }}
+          >
+            <span className="text-[#f5f5f5]">MOOVI</span>
+          </h1>
 
-      {/* Header (no gradient now) */}
-      <div className="mb-24 pt-24 pb-20 flex flex-col items-center text-center">
-        <h1
-          className="text-6xl md:text-7xl tracking-[0.35em] mb-10"
-          style={{ fontFamily: "Share Tech" }}
-        >
-          <span className="text-[#e07b5b]">MOO</span>VI
-        </h1>
+          <SearchBar value={query} onChange={setQuery} />
 
-        <SearchBar value={query} onChange={setQuery} />
+          {}
+          <div className="flex flex-wrap gap-4 mt-10">
+            {[
+              "Action",
+              "Sci-Fi",
+              "Drama",
+              "Thriller",
+              "Fantasy",
+              "Romance",
+            ].map((cat) => (
+              <div
+                key={cat}
+                className="
+            px-8 py-4
+            rounded-full
+            bg-white/10
+            backdrop-blur-lg
+            border border-[#e07b5b]/30
+            text-base md:text-lg
+            text-[#f5f5f5]
+            tracking-wide
+            cursor-pointer
+            transition-all duration-300
+            hover:bg-[#e07b5b]/20
+            hover:border-[#e07b5b]
+            hover:shadow-[0_0_20px_rgba(224,123,91,0.35)]
+          "
+              >
+                {cat}
+              </div>
+            ))}
+          </div>
+        </div>
 
-        {/* Categories */}
-        <div className="flex flex-wrap justify-center gap-4 mt-10">
-          {[
-            "Action",
-            "Sci-Fi",
-            "Drama",
-            "Thriller",
-            "Fantasy",
-            "Romance",
-          ].map((cat) => (
-            <div
-              key={cat}
-              className="
-                px-6 py-2
-                rounded-full
-                bg-white/5 backdrop-blur-md
-                border border-white/10
-                text-sm tracking-wide
-                cursor-pointer
-                transition
-                hover:bg-[#e07b5b]/20
-                hover:border-[#e07b5b]/40
-                hover:text-[#e07b5b]
-              "
-            >
-              {cat}
-            </div>
-          ))}
+        {}
+        <div className="hidden lg:block">
+          <img
+            src={ticketImg}
+            alt="Movie ticket"
+            className="
+        w-[550px]
+        opacity-90
+        drop-shadow-[0_0_40px_rgba(224,123,91,0.35)]
+      "
+          />
         </div>
       </div>
 
       {error && <p className="text-gray-400 mb-6">{error}</p>}
 
-      {/* Search Results or Home Rows */}
-      {searchResults.length > 0 ? (
-        <MovieRow title="Search Results" movies={searchResults} />
-      ) : (
-        rows.map((row) => (
-          <MovieRow
-            key={row.title}
-            title={row.title}
-            movies={row.movies}
-          />
-        ))
-      )}
+      {}
+      <div className="px-6 md:px-12 lg:px-16 pb-24">
+        {searchResults.length > 0 ? (
+          <MovieRow title="Search Results" movies={searchResults} />
+        ) : (
+          rows.map((row) => (
+            <MovieRow key={row.title} title={row.title} movies={row.movies} />
+          ))
+        )}
+      </div>
     </div>
   );
 }
