@@ -3,65 +3,35 @@ import { createContext, useContext, useEffect, useState } from "react";
 const MovieContext = createContext();
 
 export function MovieProvider({ children }) {
-  const [savedMovies, setSavedMovies] = useState([]);
+  const [watchlist, setWatchlist] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
 
-  // Load from localStorage
   useEffect(() => {
-    const stored = localStorage.getItem("moovi_saved_movies");
-    if (stored) {
-      setSavedMovies(JSON.parse(stored));
-    }
+    setWatchlist(JSON.parse(localStorage.getItem("watchlist")) || []);
+    setWishlist(JSON.parse(localStorage.getItem("wishlist")) || []);
   }, []);
 
-  // Save to localStorage
-  useEffect(() => {
-    localStorage.setItem(
-      "moovi_saved_movies",
-      JSON.stringify(savedMovies)
-    );
-  }, [savedMovies]);
+  function addMovie(movie, type) {
+    if (type === "watchlist") {
+      const updated = [...watchlist, movie];
+      setWatchlist(updated);
+      localStorage.setItem("watchlist", JSON.stringify(updated));
+    }
 
-  function addMovie(movie, status) {
-    setSavedMovies((prev) => {
-      if (prev.find((m) => m.imdbID === movie.imdbID)) return prev;
-
-      return [
-        ...prev,
-        {
-          imdbID: movie.imdbID,
-          Title: movie.Title,
-          Year: movie.Year,
-          Poster: movie.Poster,
-          Type: movie.Type,
-          status,
-          progress: 0,
-          addedAt: Date.now(),
-        },
-      ];
-    });
+    if (type === "wishlist") {
+      const updated = [...wishlist, movie];
+      setWishlist(updated);
+      localStorage.setItem("wishlist", JSON.stringify(updated));
+    }
   }
 
-  function removeMovie(imdbID) {
-    setSavedMovies((prev) =>
-      prev.filter((m) => m.imdbID !== imdbID)
-    );
-  }
-
-  function isSaved(imdbID, status) {
-    return savedMovies.some(
-      (m) => m.imdbID === imdbID && m.status === status
-    );
+  function isSaved(id, type) {
+    const list = type === "watchlist" ? watchlist : wishlist;
+    return list.some((m) => m.imdbID === id);
   }
 
   return (
-    <MovieContext.Provider
-      value={{
-        savedMovies,
-        addMovie,
-        removeMovie,
-        isSaved,
-      }}
-    >
+    <MovieContext.Provider value={{ watchlist, wishlist, addMovie, isSaved }}>
       {children}
     </MovieContext.Provider>
   );

@@ -62,30 +62,19 @@ export default function Home() {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
+    const rotateY = ((x / rect.width) - 0.5) * 12;
+    const rotateX = ((y / rect.height) - 0.5) * -12;
 
-    const rotateX = ((y - centerY) / centerY) * -6;
-    const rotateY = ((x - centerX) / centerX) * 6;
-
-    card.style.transform = `
-      perspective(800px)
-      rotateX(${rotateX}deg)
-      rotateY(${rotateY}deg)
-      translateY(-6px)
-    `;
+    card.style.setProperty("--rx", `${rotateX}deg`);
+    card.style.setProperty("--ry", `${rotateY}deg`);
   }
 
   function handleTicketLeave() {
     const card = ticketRef.current;
     if (!card) return;
 
-    card.style.transform = `
-      perspective(800px)
-      rotateX(0deg)
-      rotateY(0deg)
-      translateY(0)
-    `;
+    card.style.setProperty("--rx", "0deg");
+    card.style.setProperty("--ry", "0deg");
   }
 
   return (
@@ -96,7 +85,6 @@ export default function Home() {
         backgroundImage: "linear-gradient(to left, #5c120b, #000000)",
       }}
     >
-      
       <div className="mb-24 pt-24 pb-20 px-12 flex items-center justify-between gap-16">
         <div className="flex flex-col items-start text-left max-w-3xl">
           <h1
@@ -108,37 +96,27 @@ export default function Home() {
 
           <SearchBar value={query} onChange={setQuery} />
 
-          {}
           <div className="flex flex-wrap gap-4 mt-10">
-            {[
-              "Action",
-              "Sci-Fi",
-              "Drama",
-              "Thriller",
-              "Fantasy",
-              "Romance",
-            ].map((cat) => (
-              <div
-                key={cat}
-                className="
-                  px-8 py-4
-                  rounded-full
-                  bg-white/10
-                  backdrop-blur-lg
-                  border border-[#e07b5b]/30
-                  text-base md:text-lg
-                  text-[#f5f5f5]
-                  tracking-wide
-                  cursor-pointer
-                  transition-all duration-300
-                  hover:bg-[#e07b5b]/20
-                  hover:border-[#e07b5b]
-                  hover:shadow-[0_0_20px_rgba(224,123,91,0.35)]
-                "
-              >
-                {cat}
-              </div>
-            ))}
+            {["Action", "Sci-Fi", "Drama", "Thriller", "Fantasy", "Romance"].map(
+              (cat) => (
+                <div
+                  key={cat}
+                  className="
+                    px-8 py-4 rounded-full
+                    bg-white/10 backdrop-blur-lg
+                    border border-[#e07b5b]/30
+                    text-[#f5f5f5]
+                    cursor-pointer
+                    transition-all duration-300
+                    hover:bg-[#e07b5b]/20
+                    hover:border-[#e07b5b]
+                    hover:shadow-[0_0_20px_rgba(224,123,91,0.35)]
+                  "
+                >
+                  {cat}
+                </div>
+              )
+            )}
           </div>
         </div>
 
@@ -147,12 +125,19 @@ export default function Home() {
           ref={ticketRef}
           onMouseMove={handleTicketMove}
           onMouseLeave={handleTicketLeave}
-          style={{ transformStyle: "preserve-3d" }}
           className="
             hidden lg:block
-            transition-transform duration-200
             will-change-transform
+            transition-transform duration-300
           "
+          style={{
+            transform: `
+              perspective(900px)
+              rotateX(var(--rx))
+              rotateY(var(--ry))
+              translateY(-6px)
+            `,
+          }}
         >
           <img
             src={ticketImg}
@@ -160,8 +145,8 @@ export default function Home() {
             className="
               w-[550px]
               opacity-90
-              drop-shadow-[0_0_40px_rgba(224,123,91,0.35)]
               select-none
+              drop-shadow-[0_0_40px_rgba(224,123,91,0.35)]
             "
           />
         </div>

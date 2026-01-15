@@ -5,20 +5,12 @@ export async function searchMovies(query) {
   const res = await fetch(
     `${BASE_URL}?apikey=${API_KEY}&s=${query}`
   );
+
   const data = await res.json();
 
   if (data.Response === "False") {
-    return [];
+    throw new Error(data.Error);
   }
-
-  return data.Search;
-}
-
-export async function getDefaultMovies() {
-  const res = await fetch(
-    `${BASE_URL}?apikey=${API_KEY}&s=batman`
-  );
-  const data = await res.json();
 
   return data.Search || [];
 }
